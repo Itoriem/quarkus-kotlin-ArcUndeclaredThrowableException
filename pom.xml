@@ -12,9 +12,9 @@
         <java.version>11</java.version>
 
         <!-- Kotlin -->
-        <kotlin.version>1.4.32</kotlin.version>
+        <kotlin.version>1.5.31</kotlin.version>
         <kotlin.compiler.jvmTarget>${java.version}</kotlin.compiler.jvmTarget>
-        <kotlin.coroutines.version>1.4.3</kotlin.coroutines.version>
+        <kotlin.coroutines.version>1.5.2-native-mt</kotlin.coroutines.version>
 
         <!-- Maven -->
         <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -26,7 +26,7 @@
         <project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
 
         <!-- Quarkus -->
-        <quarkus.version>1.13.7.Final</quarkus.version>
+        <quarkus.version>2.4.2.Final</quarkus.version>
 
         <!-- Dépendances -->
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
@@ -161,21 +161,7 @@
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <quarkus.log.level>SEVERE</quarkus.log.level>
                     </systemProperties>
-                    <excludedGroups>integration</excludedGroups>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <excludedGroups>!integration</excludedGroups>
-                            <groups>integration</groups>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -198,7 +184,6 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/it/kotlin</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -222,69 +207,6 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>add-integration-test-sources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/src/it/kotlin</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-integration-test-resources</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>add-test-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/it/resources</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>Prepare files for deployment in Cloud Foundry</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <useDefaultDelimiters>false</useDefaultDelimiters>
-                            <delimiters>
-                                <delimiter>${*}</delimiter>
-                            </delimiters>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/cloudfoundry</directory>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>*.yml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
